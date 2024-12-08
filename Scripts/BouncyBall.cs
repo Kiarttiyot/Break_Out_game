@@ -6,21 +6,41 @@ public class BouncyBall : MonoBehaviour
 {
     public float minY = -5.5f;
     public float maxVelocity = 15f;
-    Rigidbody2D rb;
-    // Start is called before the first frame update
+
+    private Rigidbody2D rb;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        if(transform.position.y < minY)
+        // Reset position and velocity if ball falls below minY
+        if (transform.position.y < minY)
         {
-            transform.position = Vector3.zero;
-            rb.velocity = Vector3.zero;
-
+            ResetBall();
         }
+
+        // Clamp the velocity to the maximum allowed speed
+        if (rb.velocity.magnitude > maxVelocity)
+        {
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxVelocity);
+        }
+    }
+
+    private void ResetBall()
+    {
+        transform.position = Vector3.zero;
+        rb.velocity = Vector3.zero;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Brick"))
+        {
+            Destroy(collision.gameObject);
+        }
+
     }
 }
