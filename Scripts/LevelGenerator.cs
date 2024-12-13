@@ -7,6 +7,7 @@ public class NewBehaviourScript : MonoBehaviour
     public Vector2Int size;
     public Vector2 offset;
     public GameObject brickPrefab; //*for include GameObject to use.
+    public Gradient gradient;
 
     private void Awake()
     {
@@ -16,6 +17,7 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 GameObject newBrick = Instantiate(brickPrefab,transform);
                 newBrick.transform.position = transform.position+ new Vector3((float)((size.x -1)*.5f -i)*offset.x,j*offset.y,0);
+                newBrick.GetComponent<SpriteRenderer>().color = gradient.Evaluate((float)j/(size.y-1));
             }
         }
     }
